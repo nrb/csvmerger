@@ -39,3 +39,18 @@ func Merge(original, new []*types.Entry) []*types.Entry {
 	}
 	return original
 }
+
+// FindRedefinition searches a slice of *types.Entry for entries that define
+// different English terms for Japanese terms, and vice versa.
+// Any redefinitions found are returned as a slice.
+func FindRedefinition(needle *types.Entry, haystack []*types.Entry) ([]*types.Entry, bool) {
+	redefs := []*types.Entry{}
+	var redefined bool
+	for _, e := range haystack {
+		if types.EntriesRedefined(needle, e) {
+			redefined = true
+			redefs = append(redefs, e)
+		}
+	}
+	return redefs, redefined
+}

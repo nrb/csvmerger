@@ -80,3 +80,31 @@ func TestMergeLists(t *testing.T) {
 	actual := Merge(original, new)
 	assert.Equal(t, expected, actual)
 }
+
+func TestFindRedefinition(t *testing.T) {
+	tests := []struct {
+		name          string
+		needle        *types.Entry
+		haystack      []*types.Entry
+		expectedSlice []*types.Entry
+		expectedFound bool
+	}{
+		{
+			name:     "Same Japanese but different English is a redefintion",
+			needle:   types.NewEntry("まち", "city", "1"),
+			haystack: []*types.Entry{types.NewEntry("まち", "town", "1")},
+			expectedSlice: []*types.Entry{
+				types.NewEntry("まち", "town", "1"),
+			},
+			expectedFound: true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual, ok := FindRedefinition(test.needle, test.haystack)
+			assert.Equal(t, test.expectedFound, ok)
+			assert.Equal(t, test.expectedSlice, actual)
+		})
+	}
+}
