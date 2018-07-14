@@ -11,7 +11,33 @@ import (
 
 func LineToEntry(line string) (*types.Entry, error) {
 	fields := strings.Split(line, ",")
-	if len(fields) != 3 {
+	switch {
+	case len(fields) > 3:
+		// We have an extra comma, check for surrounding quotes
+		var start, end int
+		for i, f := range fields {
+			if strings.HasPrefix(f, `"`) {
+				start = i
+			}
+			if strings.HasSuffix(f, `"`) {
+				end = i
+			}
+		}
+		// Try to merge the quoted text into one field
+		var newField string
+		if start < end {
+			newField = strings.Join(fields[start:end+1], ",")
+		}
+		// Insert the actual field into the fields, and drop any extras
+		if newField != "" {
+			fields[start] = newField
+			fields = append(fields[:end], fields[end+1:]...)
+		}
+		// Our attempt at fixing the problem didn't work, error
+		if len(fields) != 3 {
+			return nil, errors.Errorf("Expected 3 fields, got %d for %s", len(fields), line)
+		}
+	case len(fields) < 3:
 		return nil, errors.Errorf("Expected 3 fields, got %d for %s", len(fields), line)
 	}
 	return types.NewEntry(fields[0], fields[1], fields[2]), nil

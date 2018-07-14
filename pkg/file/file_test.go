@@ -30,6 +30,11 @@ func TestLineToEntry(t *testing.T) {
 			line:          "まち,city / town,1 2 3",
 			expectedEntry: types.NewEntry("まち", "city / town", "1 2 3"),
 		},
+		{
+			name:          "Entry with a comma inside quotes should work",
+			line:          `はい、どうぞ,"yes, please",13`,
+			expectedEntry: types.NewEntry("はい、どうぞ", `"yes, please"`, "13"),
+		},
 	}
 
 	for _, test := range tests {
