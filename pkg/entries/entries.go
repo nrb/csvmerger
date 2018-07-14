@@ -25,6 +25,9 @@ func Update(target, source *types.Entry) error {
 	return target.MergeTags(source)
 }
 
+// Merge combines two slices of entries. If an entry from new
+// is not in original, it will be added. If an entry is in both,
+// the tags from both will be merged.
 func Merge(original, new []*types.Entry) []*types.Entry {
 	for _, e := range new {
 		o, ok := Find(e, original)
