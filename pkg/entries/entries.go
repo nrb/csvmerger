@@ -19,3 +19,20 @@ func Find(needle *types.Entry, haystack []*types.Entry) (*types.Entry, bool) {
 	}
 	return target, found
 }
+
+// Update merges tags from a source Entry into a target entry.
+func Update(target, source *types.Entry) error {
+	return target.MergeTags(source)
+}
+
+func Merge(original, new []*types.Entry) []*types.Entry {
+	for _, e := range new {
+		o, ok := Find(e, original)
+		if ok {
+			Update(o, e)
+		} else {
+			original = append(original, e)
+		}
+	}
+	return original
+}

@@ -59,3 +59,24 @@ func TestFind(t *testing.T) {
 		})
 	}
 }
+
+func TestMergeLists(t *testing.T) {
+	original := []*types.Entry{
+		types.NewEntry("うち", "house / home", "1"),
+		types.NewEntry("まち", "city / town", "2 3"),
+	}
+	new := []*types.Entry{
+		types.NewEntry("うち", "house / home", "17 2"),
+		types.NewEntry("まち", "city / town", "3"),
+		types.NewEntry("じんじゃ", "shrine", "4"),
+	}
+
+	expected := []*types.Entry{
+		types.NewEntry("うち", "house / home", "1 17 2"),
+		types.NewEntry("まち", "city / town", "2 3"),
+		types.NewEntry("じんじゃ", "shrine", "4"),
+	}
+
+	actual := Merge(original, new)
+	assert.Equal(t, expected, actual)
+}
