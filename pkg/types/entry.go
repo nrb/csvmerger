@@ -31,6 +31,13 @@ func EntriesAreEqual(e1, e2 *Entry) bool {
 
 }
 
+// EntriesAreDuplicates looks for duplicated terms in either Japanese or English.
+// Entries are only duplicates if one field is the same; if both are the same,
+// the entry is considered equal, not a duplicate.
+func EntriesAreDuplicates(e1, e2 *Entry) bool {
+	return (e1.Japanese == e2.Japanese || e1.English == e2.English) && !EntriesAreEqual(e1, e2)
+}
+
 func (e *Entry) MergeTags(source *Entry) error {
 	if !EntriesAreEqual(e, source) {
 		return errors.New("Cannot merge unequal entries")
