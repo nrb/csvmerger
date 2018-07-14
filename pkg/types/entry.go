@@ -31,10 +31,10 @@ func EntriesAreEqual(e1, e2 *Entry) bool {
 
 }
 
-// EntriesAreDuplicates looks for duplicated terms in either Japanese or English.
-// Entries are only duplicates if one field is the same; if both are the same,
-// the entry is considered equal, not a duplicate.
-func EntriesAreDuplicates(e1, e2 *Entry) bool {
+// EntriesRedefined looks for redfined terms in either Japanese or English.
+// Entries are only redfined if one field is the same; if both are the same,
+// the entry is considered equal, not a redefinition.
+func EntriesRedefined(e1, e2 *Entry) bool {
 	return (e1.Japanese == e2.Japanese || e1.English == e2.English) && !EntriesAreEqual(e1, e2)
 }
 

@@ -160,7 +160,7 @@ func TestEntryMergeTags(t *testing.T) {
 	}
 }
 
-func TestEntriesAreDuplicates(t *testing.T) {
+func TestEntriesRedefined(t *testing.T) {
 	tests := []struct {
 		name     string
 		entryOne *Entry
@@ -168,19 +168,19 @@ func TestEntriesAreDuplicates(t *testing.T) {
 		expected bool
 	}{
 		{
-			name:     "Same Japanese but different English is a duplicate",
+			name:     "Same Japanese but different English is a redefinition",
 			entryOne: NewEntry(machi, "city", "1"),
 			entryTwo: NewEntry(machi, "town", "1"),
 			expected: true,
 		},
 		{
-			name:     "Same English but different Japanese is a duplicate",
+			name:     "Same English but different Japanese is a redefinition",
 			entryOne: NewEntry("バスのりば", "bus stop", "1"),
 			entryTwo: NewEntry("バスてい", "bus stop", "1"),
 			expected: true,
 		},
 		{
-			name:     "Same Japanese & English are *not* duplicate",
+			name:     "Same Japanese & English are *not* redefinition",
 			entryOne: NewEntry(machi, "city / town", "1"),
 			entryTwo: NewEntry(machi, "city / town", "1"),
 			expected: false,
@@ -189,7 +189,7 @@ func TestEntriesAreDuplicates(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			actual := EntriesAreDuplicates(test.entryOne, test.entryTwo)
+			actual := EntriesRedefined(test.entryOne, test.entryTwo)
 			assert.Equal(t, test.expected, actual)
 		})
 	}
